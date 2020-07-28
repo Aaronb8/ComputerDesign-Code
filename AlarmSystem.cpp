@@ -8,6 +8,7 @@
 // How to Compile: gcc AlarmSystem.c -o AlarmSystem -lwiringPi -lpthread -lwiringPiDev
 
 // Libraries 
+#include <iostream>
 #include <wiringPi.h>
 #include <softPwm.h>
 #include <pcf8574.h>
@@ -27,7 +28,7 @@
 #define ledPinBlue   2
 
 //interrupt pin
-#define isrPin 29 //which one doesn't work?
+#define isrPin 29 
 
 // For Ultrasonic Sensor
 #define trigPin 4
@@ -49,42 +50,75 @@
 #define D6      BASE+6
 #define D7      BASE+7
 
-int lcdhd, r, g, b, i;
+using namespace std;
 
-bool status;
+int lcdhd, redLED, greenLED, blueLED, i;
 
-// Functions for Ultrasonic Sensor
-int pulseIn(int pin, int level, int timeout)  // Function pulseIn: obtain pulse time of a pin
-{
+bool status = false;
+
+/*
+* Calculates the pulse time of selected pin.
+* Parameters: pin, level, timeout
+* Return: 0 or micros
+*/
+int pulseIn(int pin, int level, int timeout){
+
    struct timeval tn, t0, t1;
-   long micros;
+   long micros = 0;
+   
    gettimeofday(&t0, NULL);
-   micros = 0;
-   while (digitalRead(pin) != level)
-   {
+
+   while (digitalRead(pin) != level){
+
       gettimeofday(&tn, NULL);
-      if (tn.tv_sec > t0.tv_sec) micros = 1000000L; else micros = 0;
-      micros += (tn.tv_usec - t0.tv_usec);
-      if (micros > timeout) return 0;
+
+      if (tn.tv_sec > t0.tv_sec){
+        micros = 1000000L; else micros = 0;
+        micros += (tn.tv_usec - t0.tv_usec);
+        }
+      
+      if (micros > timeout){
+          return 0;
+        } 
    }
+
    gettimeofday(&t1, NULL);
-   while (digitalRead(pin) == level)
-   {
+
+   while (digitalRead(pin) == level){
+
       gettimeofday(&tn, NULL);
-      if (tn.tv_sec > t0.tv_sec) micros = 1000000L; else micros = 0;
-      micros = micros + (tn.tv_usec - t0.tv_usec);
-      if (micros > timeout) return 0;
+
+      if (tn.tv_sec > t0.tv_sec){
+          micros = 1000000L;
+        }  
+      else {
+        micros = 0;
+        micros = micros + (tn.tv_usec - t0.tv_usec);
+        }
+      if (micros > timeout){
+          return 0;
+        } 
    }
    if (tn.tv_sec > t1.tv_sec) micros = 1000000L; else micros = 0;
    micros = micros + (tn.tv_usec - t1.tv_usec);
    return micros;
 }
 
+/*
+* --
+* Parameters: -
+* Return: -
+*/
 void setArmed()
 {
 	status = true;
 }
 
+/*
+* Calculates the distance using the ultrasonic sensor.
+* Parameters: -
+* Return: distance
+*/
 float getSonar(){  // Get the measurement result of ultrasonic module with unit: cm
     long pingTime;
     float distance;
@@ -96,43 +130,60 @@ float getSonar(){  // Get the measurement result of ultrasonic module with unit:
     return distance;
 }
 
-// Function that displays distance from sensor onto LCD
+/*
+* Displays distance from sensor onto LCD
+* Parameters: -
+* Return: distance
+*/
 float printDistance(){
     float distance = 0;
     distance = getSonar();
-    lcdPosition(lcdhd,0,0);  // Set the LCD cursor position to (0,0)
-    lcdPrintf(lcdhd,"Dist: %.2fcm", distance);  //Display system time on LCD
-    printf("ARMED: Dist: %.2fcm\n", distance);
+    //lcdPosition(lcdhd,0,0);  // Set the LCD cursor position to (0,0)
+    //lcdPrintf(lcdhd,"Dist: %.2fcm", distance);  //Display system time on LCD
+    //printf("ARMED: Dist: %.2fcm\n", distance);
     return distance;
 }
 
-
+/*
+* Creates PWM for red, green, and blue pins for LED
+* Parameters: void
+* Return: -
+*/
 void setupLedPin(void)
 {
-	softPwmCreate(ledPinRed,  0, 100);	//Creat SoftPWM pin for red
-	softPwmCreate(ledPinGreen,0, 100);  //Creat SoftPWM pin for green
-	softPwmCreate(ledPinBlue, 0, 100);  //Creat SoftPWM pin for blue
+	softPwmCreate(ledPinRed,  0, 100);
+	softPwmCreate(ledPinGreen,0, 100);  
+	softPwmCreate(ledPinBlue, 0, 100);  
 }
 
-void setLedColor(int r, int g, int b)
+/*
+* Sets the duty cycle for each pin
+* Parameters: redLED, greenLED, blueLED
+* Return: -
+*/
+void setLedColor(int redLED, int greenLED, int blueLED)
 {
-	softPwmWrite(ledPinRed,   r);	//Set the duty cycle 
-	softPwmWrite(ledPinGreen, g);   //Set the duty cycle 
-	softPwmWrite(ledPinBlue,  b);   //Set the duty cycle 
+	softPwmWrite(ledPinRed,   redLED);	 
+	softPwmWrite(ledPinGreen, greenLED);   
+	softPwmWrite(ledPinBlue,  blueLED);    
 }
 
 int main(void)
 {
     char command[50];
     long distance;
-    status = false;
-
-    strcpy(command, "echo Chris is gay");
+    //status = false;
 
     printf("Sensor and Screen are Initializing.\n\n");
-    wiringPiSetup(); //Initialize wiringPi.
+
+    // LCD, LED, and Ultrasonic Sensor Set up
+    wiringPiSetup(); 
+    setupLedPin();
+
     wiringPiISR (isrPin, INT_EDGE_RISING,  &setArmed) ;
+
     pcf8574Setup(BASE,pcf8574_address);  // Initialize PCF8574
+
     for(i=0;i<8;i++){
         pinMode(BASE+i,OUTPUT);  // Set PCF8574 port to output mode
     }
@@ -144,12 +195,13 @@ int main(void)
     pinMode(trigPin,OUTPUT);
     pinMode(echoPin,INPUT);
 
-    setupLedPin();
-
+    
+    // Checking if LCD was initialized
     if(lcdhd == -1){
         printf("LCD could not be initialized. Exiting.");
         return 1;
     }
+
     while(1){
 	if(status == false){
 	   lcdPosition(lcdhd,0,0);
@@ -157,21 +209,17 @@ int main(void)
 	   setLedColor(99,0,99);
 	}
 	else{
-        	//r = random()%100;  //get a random in (0,100)
-		//g = random()%100;  //get a random in (0,100)
-		//b = random()%100;  //get a random in (0,100)
-		r = 1;
-		g = 99;
-		b = 99;
-		setLedColor(r,g,b);//set random as the duty cycle value
-		printf("r=%d,  g=%d,  b=%d \n",r,g,b);
-	        distance = printDistance();
-       		delay(500);
+
+		setLedColor(1,99,99);
+	    distance = printDistance();
+       	delay(500);
+
 		if(distance < 20){
 			system(command);
+            system("ifconfig");
 			while(1){
 				lcdPosition(lcdhd,0,0);
-				lcdPrintf(lcdhd, "!INTRUDER ALERT!");
+				lcdPrintf(lcdhd, "Sensor Triggered");
 				setLedColor(99,99,0);
 		}}
     }}
