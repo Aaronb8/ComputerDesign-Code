@@ -5,7 +5,7 @@
 * modification: 7/20/2020
 **********************************************************************/
 
-// How to Compile: gcc AlarmSystem.c -o AlarmSystem -lwiringPi -lpthread -lwiringPiDev
+// How to Compile: g++ AlarmSystem.cpp -o AlarmSystem -lwiringPi -lpthread -lwiringPiDev
 
 // Libraries 
 #include <iostream>
