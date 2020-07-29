@@ -143,9 +143,9 @@ float printDistance(){
     float distance = 0;
     distance = getSonar();
     //lcdPosition(lcdhd,0,0);
-    digitalWrite(LED,HIGH);
+    //digitalWrite(LED,HIGH);
     //lcdPuts(lcdhd, "Armed");
-    lcdPrintf(lcdhd, "Armed \n");
+    lcdPrintf(lcdhd, "Armed");
     return distance;
 }
 
@@ -222,7 +222,7 @@ int main(void)
 	  if(!status){
       lcdClear(lcdhd);
 	    //lcdPosition(lcdhd,0,0);
-      digitalWrite(LED,HIGH);
+      //digitalWrite(LED,HIGH);
 	    lcdPuts(lcdhd, "Disarmed");
 	    setLedColor(99,0,99);
 	    }else{
@@ -239,7 +239,7 @@ int main(void)
 			while(1){
         lcdClear(lcdhd);
 				//lcdPosition(lcdhd,0,0);
-        digitalWrite(LED,HIGH);
+        //digitalWrite(LED,HIGH);
 				lcdPuts(lcdhd, "Detected");
 				setLedColor(99,99,0);
 		    }
