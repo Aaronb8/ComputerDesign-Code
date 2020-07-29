@@ -216,7 +216,10 @@ int main(void)
 
 		if(distance < 20){
 			system(command);
-      system("ifconfig");
+      system("curl -X POST https://textbelt.com/text \
+       --data-urlencode phone='7866208531' \
+       --data-urlencode message='Your home alarm system has detected movement.' \
+       -d key=textbelt");
 			while(1){
 				lcdPosition(lcdhd,0,0);
 				lcdPrintf(lcdhd, "Sensor Triggered");
