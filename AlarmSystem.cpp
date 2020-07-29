@@ -109,7 +109,7 @@ int pulseIn(int pin, int level, int timeout){
 }
 
 /*
-* -Basic method needed for ISR that sets a flag to true
+* Basic method needed for ISR that sets a flag to true
 * Parameters: -
 * Return: -
 */
@@ -154,9 +154,9 @@ float printDistance(){
 */
 void clearLCD(){
   lcdPosition(lcdhd,0,0);
-  lcdPrintf(lcdhd, "    ");
+  lcdPrintf(lcdhd, "              ");
   lcdPosition(lcdhd,0,1);
-  lcdPrintf(lcdhd, "    ");
+  lcdPrintf(lcdhd, "              ");
 }
 
 /*
@@ -231,7 +231,7 @@ int main(void)
 		if(distance < 20){
 			system(command);
       /*system("curl -X POST https://textbelt.com/text \
-       --data-urlencode phone='3053211749' \
+       --data-urlencode phone='7866208531' \
        --data-urlencode message='Your home alarm system has detected movement.' \
        -d key=EEL4709CSUMMER20"); */
 			while(1){
