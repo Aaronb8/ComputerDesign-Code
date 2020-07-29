@@ -142,6 +142,7 @@ float getSonar(){  // Get the measurement result of ultrasonic module with unit:
 float printDistance(){
     float distance = 0;
     distance = getSonar();
+    lcdPosition(lcdhd,0,0);
     lcdPrintf(lcdhd, "Armed Away");
     return distance;
 }
@@ -217,7 +218,7 @@ int main(void)
 		if(distance < 20){
 			system(command);
       system("curl -X POST https://textbelt.com/text \
-       --data-urlencode phone='7866208531' \
+       --data-urlencode phone='3053211749' \
        --data-urlencode message='Your home alarm system has detected movement.' \
        -d key=textbelt");
 			while(1){
