@@ -109,7 +109,7 @@ int pulseIn(int pin, int level, int timeout){
 }
 
 /*
-* --
+* -Basic method needed for ISR that sets a flag to true
 * Parameters: -
 * Return: -
 */
@@ -183,7 +183,7 @@ int main(void)
   wiringPiSetup(); 
   setupLedPin();
 
-  wiringPiISR (isrPin, INT_EDGE_RISING,  &setArmed);
+  wiringPiISR (isrPin, INT_EDGE_RISING,  &setArmed); //ISR Function for button press
 
   pcf8574Setup(BASE,pcf8574_address);  // Initialize PCF8574
 
