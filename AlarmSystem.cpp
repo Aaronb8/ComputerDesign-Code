@@ -229,6 +229,7 @@ int main(void)
         setLedColor(1,99,99);
 	      float distance = 0;
         distance = getSonar();
+        lcdPosition(lcdhd,0,0);
         lcdPrintf(lcdhd, "Armed---      ");
        	delay(500);
 
