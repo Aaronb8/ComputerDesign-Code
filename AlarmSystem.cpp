@@ -220,7 +220,7 @@ int main(void)
       system("curl -X POST https://textbelt.com/text \
        --data-urlencode phone='3053211749' \
        --data-urlencode message='Your home alarm system has detected movement.' \
-       -d key=textbelt");
+       -d key=EEL4709CSUMMER20");
 			while(1){
 				lcdPosition(lcdhd,0,0);
 				lcdPrintf(lcdhd, "Sensor Triggered");
