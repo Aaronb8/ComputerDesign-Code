@@ -143,7 +143,8 @@ float printDistance(){
     float distance = 0;
     distance = getSonar();
     //lcdPosition(lcdhd,0,0);
-    lcdPuts(lcdhd, "Armed Away");
+    digitalWrite(LED,HIGH);
+    lcdPuts(lcdhd, "Armed");
     return distance;
 }
 
@@ -220,7 +221,8 @@ int main(void)
 	  if(!status){
       lcdClear(lcdhd);
 	    //lcdPosition(lcdhd,0,0);
-	    lcdPuts(lcdhd, "Disarmed Home");
+      digitalWrite(LED,HIGH);
+	    lcdPuts(lcdhd, "Disarmed");
 	    setLedColor(99,0,99);
 	    }else{
         setLedColor(1,99,99);
@@ -231,12 +233,13 @@ int main(void)
 			system(command);
       /*system("curl -X POST https://textbelt.com/text \
        --data-urlencode phone='7866208531' \
-       --data-urlencode message='Your home alarm system has detected movement.' \
+       --data-urlencode message='Your home alarm system has detected movement. From: Raspberry Pi' \
        -d key=EEL4709CSUMMER20"); */
 			while(1){
         lcdClear(lcdhd);
 				//lcdPosition(lcdhd,0,0);
-				lcdPuts(lcdhd, "Sensor Triggered");
+        digitalWrite(LED,HIGH);
+				lcdPuts(lcdhd, "Detected");
 				setLedColor(99,99,0);
 		    }
       }
