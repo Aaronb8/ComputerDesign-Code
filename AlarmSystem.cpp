@@ -142,7 +142,7 @@ float getSonar(){  // Get the measurement result of ultrasonic module with unit:
 float printDistance(){
     float distance = 0;
     distance = getSonar();
-    lcdPrintf(lcdhd, "Armed. Away");
+    lcdPrintf(lcdhd, "Armed Away");
     return distance;
 }
 
@@ -206,7 +206,7 @@ int main(void)
   while(1){
 	  if(!status){
 	    lcdPosition(lcdhd,0,0);
-	    lcdPrintf(lcdhd, "Disarmed. Home");
+	    lcdPrintf(lcdhd, "Disarmed Home");
 	    setLedColor(99,0,99);
 	    } 
 	    else{
