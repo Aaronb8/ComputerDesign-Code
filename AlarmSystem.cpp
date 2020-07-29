@@ -53,6 +53,7 @@
 using namespace std;
 
 int lcdhd, redLED, greenLED, blueLED;
+bool status;
 
 /*
 * Calculates the pulse time of selected pin.
@@ -72,8 +73,9 @@ int pulseIn(int pin, int level, int timeout){
 
       if (tn.tv_sec > t0.tv_sec){
         micros = 1000000L; 
-        }else{ micros = 0;
-        micros += (tn.tv_usec - t0.tv_usec);
+        }else{ 
+          micros = 0;
+          micros += (tn.tv_usec - t0.tv_usec);
         }
       
       if (micros > timeout){
@@ -102,8 +104,8 @@ int pulseIn(int pin, int level, int timeout){
    }else{
       micros = 0;
       micros = micros + (tn.tv_usec - t1.tv_usec);
-      return micros;
-   } 
+   }
+    return micros;
 }
 
 /*
@@ -133,13 +135,14 @@ float getSonar(){  // Get the measurement result of ultrasonic module with unit:
 }
 
 /*
-* Displays distance from sensor onto LCD
+* Sets system to Armed state
 * Parameters: -
 * Return: distance
 */
 float printDistance(){
     float distance = 0;
     distance = getSonar();
+    lcdPrintf(lcdhd, "Armed. Away");
     return distance;
 }
 
@@ -171,7 +174,7 @@ int main(void)
 {
   char command[50];
   long distance = 0;
-  bool status = false;
+  status = false;
 
   printf("Sensor and Screen are Initializing.\n\n");
 
@@ -203,7 +206,7 @@ int main(void)
   while(1){
 	  if(!status){
 	    lcdPosition(lcdhd,0,0);
-	    lcdPrintf(lcdhd, "Disarmed");
+	    lcdPrintf(lcdhd, "Disarmed. Home");
 	    setLedColor(99,0,99);
 	    } 
 	    else{
