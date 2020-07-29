@@ -231,7 +231,6 @@ int main(void)
         distance = getSonar();
         lcdPrintf(lcdhd, "Armed---      ");
        	delay(500);
-         }
 
 		if(distance < 20){
 			system(command);
