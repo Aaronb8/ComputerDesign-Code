@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <LiquidCrystal_I2C.h>
 
 // For RBG LED
 #define ledPinRed 0
@@ -38,7 +37,6 @@
 #define timeOut MAX_DISTANCE*60 
 
 // For LCD Screen
-LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define pcf8574_address 0x27    
 #define BASE 64                 
 
@@ -155,11 +153,10 @@ float printDistance(){
 * Return: -
 */
 void clearLCD(){
-  //lcdPosition(lcdhd,0,0);
-  //lcdPrintf(lcdhd, "");
-  //lcdPosition(lcdhd,0,1);
-  //lcdPrintf(lcdhd, "");
-  lcd.clear();
+  lcdPosition(lcdhd,0,0);
+  lcdPrintf(lcdhd, "");
+  lcdPosition(lcdhd,0,1);
+  lcdPrintf(lcdhd, "");
 }
 
 /*
@@ -221,9 +218,9 @@ int main(void)
 
   while(1){
 	  if(!status){
-      clearLCD();
+      lcdClear(lcdhd);
 	    lcdPosition(lcdhd,0,0);
-	    lcdPrintf(lcdhd, "Disarmed Home");
+	    lcdPuts(lcdhd, "Disarmed Home");
 	    setLedColor(99,0,99);
 	    } 
 	    else{
@@ -238,9 +235,9 @@ int main(void)
        --data-urlencode message='Your home alarm system has detected movement.' \
        -d key=EEL4709CSUMMER20"); */
 			while(1){
-        clearLCD();
+        lcdClear(lcdhd);
 				lcdPosition(lcdhd,0,1);
-				lcdPrintf(lcdhd, "Sensor Triggered");
+				lcdPuts(lcdhd, "Sensor Triggered");
 				setLedColor(99,99,0);
 		    }
       }
