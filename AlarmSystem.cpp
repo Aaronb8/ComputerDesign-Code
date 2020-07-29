@@ -143,8 +143,9 @@ float printDistance(){
     float distance = 0;
     distance = getSonar();
     //lcdPosition(lcdhd,0,0);
-    //digitalWrite(LED,HIGH);
-    lcdPuts(lcdhd, "Armed");
+    digitalWrite(LED,HIGH);
+    //lcdPuts(lcdhd, "Armed");
+    lcdPrintf(lcdhd, "Armed \n");
     return distance;
 }
 
