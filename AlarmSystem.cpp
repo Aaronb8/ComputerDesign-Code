@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <LiquidCrystal_I2C.h>
 
 // For RBG LED
 #define ledPinRed 0
@@ -153,10 +154,11 @@ float printDistance(){
 * Return: -
 */
 void clearLCD(){
-  lcdPosition(lcdhd,0,0);
-  lcdPrintf(lcdhd, "              ");
-  lcdPosition(lcdhd,0,1);
-  lcdPrintf(lcdhd, "              ");
+  //lcdPosition(lcdhd,0,0);
+  //lcdPrintf(lcdhd, "");
+  //lcdPosition(lcdhd,0,1);
+  //lcdPrintf(lcdhd, "");
+  lcd.clear();
 }
 
 /*
