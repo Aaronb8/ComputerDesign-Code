@@ -135,33 +135,6 @@ float getSonar(){  // Get the measurement result of ultrasonic module with unit:
 }
 
 /*
-* Sets system to Armed state
-* Parameters: -
-* Return: distance
-*/
-float printDistance(){
-    float distance = 0;
-    distance = getSonar();
-    //lcdPosition(lcdhd,0,0);
-    //digitalWrite(LED,HIGH);
-    lcdPuts(lcdhd, "Armed        ");
-    //lcdPrintf(lcdhd, "Armed");
-    return distance;
-}
-
-/*
-* Clears the LCD for new writing
-* Parameters: -
-* Return: -
-*/
-void clearLCD(){
-  lcdPosition(lcdhd,0,0);
-  lcdPrintf(lcdhd, "");
-  lcdPosition(lcdhd,0,1);
-  lcdPrintf(lcdhd, "");
-}
-
-/*
 * Creates PWM for red, green, and blue pins for LED
 * Parameters: void
 * Return: -
@@ -221,29 +194,25 @@ int main(void)
   while(1){
 	  if(!status){
       lcdClear(lcdhd);
-	    //lcdPosition(lcdhd,0,0);
-      //digitalWrite(LED,HIGH);
-	    lcdPuts(lcdhd, "Disarmed        "); //Disarmed
+	    lcdPuts(lcdhd, "Disarmed"); //Disarmed
 	    setLedColor(99,0,99);
 	    }else{
         setLedColor(1,99,99);
 	      float distance = 0;
         distance = getSonar();
         lcdPosition(lcdhd,0,0);
-        lcdPrintf(lcdhd, "Armed---      ");
+        lcdPrintf(lcdhd, "Armed");
        	delay(500);
 
 		if(distance < 20){
 			system(command);
-      /*system("curl -X POST https://textbelt.com/text \
+      system("curl -X POST https://textbelt.com/text \
        --data-urlencode phone='7866208531' \
        --data-urlencode message='Your home alarm system has detected movement. From: Raspberry Pi' \
-       -d key=EEL4709CSUMMER20"); */
+       -d key=EEL4709CSUMMER20");
 			while(1){
         lcdClear(lcdhd);
-				//lcdPosition(lcdhd,0,0);
-        //digitalWrite(LED,HIGH);
-				lcdPuts(lcdhd, "Detected        ");
+				lcdPuts(lcdhd, "Detected");
 				setLedColor(99,99,0);
 		    }
       }
