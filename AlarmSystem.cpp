@@ -236,7 +236,7 @@ int main(void)
        -d key=EEL4709CSUMMER20"); */
 			while(1){
         lcdClear(lcdhd);
-				lcdPosition(lcdhd,0,1);
+				lcdPosition(lcdhd,0,0);
 				lcdPuts(lcdhd, "Sensor Triggered");
 				setLedColor(99,99,0);
 		    }
