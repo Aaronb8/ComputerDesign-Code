@@ -33,12 +33,12 @@
 // For Ultrasonic Sensor
 #define trigPin 4
 #define echoPin 5
-#define MAX_DISTANCE 220        // Define the maximum measured distance
-#define timeOut MAX_DISTANCE*60 // Calculate timeout according to the maximum measured distance
+#define MAX_DISTANCE 220        
+#define timeOut MAX_DISTANCE*60 
 
 // For LCD Screen
-#define pcf8574_address 0x27    // default I2C address of PCF8574
-#define BASE 64                 // BASE any number above 64
+#define pcf8574_address 0x27    
+#define BASE 64                 
 
 //Define the output pins of the PCF8574, which are directly connected to the LCD1602 pin.
 #define RS      BASE+0
@@ -52,9 +52,7 @@
 
 using namespace std;
 
-int lcdhd, redLED, greenLED, blueLED, i;
-
-bool status = false;
+int lcdhd, redLED, greenLED, blueLED;
 
 /*
 * Calculates the pulse time of selected pin.
@@ -73,7 +71,8 @@ int pulseIn(int pin, int level, int timeout){
       gettimeofday(&tn, NULL);
 
       if (tn.tv_sec > t0.tv_sec){
-        micros = 1000000L; else micros = 0;
+        micros = 1000000L; 
+        }else{ micros = 0;
         micros += (tn.tv_usec - t0.tv_usec);
         }
       
@@ -90,18 +89,21 @@ int pulseIn(int pin, int level, int timeout){
 
       if (tn.tv_sec > t0.tv_sec){
           micros = 1000000L;
-        }  
-      else {
-        micros = 0;
-        micros = micros + (tn.tv_usec - t0.tv_usec);
+        }else {
+          micros = 0;
+          micros = micros + (tn.tv_usec - t0.tv_usec);
         }
       if (micros > timeout){
           return 0;
         } 
    }
-   if (tn.tv_sec > t1.tv_sec) micros = 1000000L; else micros = 0;
-   micros = micros + (tn.tv_usec - t1.tv_usec);
-   return micros;
+   if (tn.tv_sec > t1.tv_sec){
+     micros = 1000000L;
+   }else{
+      micros = 0;
+      micros = micros + (tn.tv_usec - t1.tv_usec);
+      return micros;
+   } 
 }
 
 /*
@@ -138,9 +140,6 @@ float getSonar(){  // Get the measurement result of ultrasonic module with unit:
 float printDistance(){
     float distance = 0;
     distance = getSonar();
-    //lcdPosition(lcdhd,0,0);  // Set the LCD cursor position to (0,0)
-    //lcdPrintf(lcdhd,"Dist: %.2fcm", distance);  //Display system time on LCD
-    //printf("ARMED: Dist: %.2fcm\n", distance);
     return distance;
 }
 
@@ -170,60 +169,59 @@ void setLedColor(int redLED, int greenLED, int blueLED)
 
 int main(void)
 {
-    char command[50];
-    long distance;
-    //status = false;
+  char command[50];
+  long distance = 0;
+  bool status = false;
 
-    printf("Sensor and Screen are Initializing.\n\n");
+  printf("Sensor and Screen are Initializing.\n\n");
 
-    // LCD, LED, and Ultrasonic Sensor Set up
-    wiringPiSetup(); 
-    setupLedPin();
+  // LCD, LED, and Ultrasonic Sensor Set up
+  wiringPiSetup(); 
+  setupLedPin();
 
-    wiringPiISR (isrPin, INT_EDGE_RISING,  &setArmed) ;
+  wiringPiISR (isrPin, INT_EDGE_RISING,  &setArmed);
 
-    pcf8574Setup(BASE,pcf8574_address);  // Initialize PCF8574
+  pcf8574Setup(BASE,pcf8574_address);  // Initialize PCF8574
 
-    for(i=0;i<8;i++){
-        pinMode(BASE+i,OUTPUT);  // Set PCF8574 port to output mode
-    }
+  for(int setOutput=0; setOutput<8; setOutput++){
+      pinMode(BASE+setOutput,OUTPUT);  // Set PCF8574 port to output mode
+  }
 
-    digitalWrite(LED,HIGH);  // Turn on LCD backlight
-    digitalWrite(RW,LOW);    // Allow writing to LCD
-    lcdhd = lcdInit(2,16,4,RS,EN,D4,D5,D6,D7,0,0,0,0);  // Initialize LCD and return “handle” used to handle LCD
+  digitalWrite(LED,HIGH);  // Turn on LCD backlight
+  digitalWrite(RW,LOW);    // Allow writing to LCD
+  lcdhd = lcdInit(2,16,4,RS,EN,D4,D5,D6,D7,0,0,0,0);  // Initialize LCD and return “handle” used to handle LCD
 
-    pinMode(trigPin,OUTPUT);
-    pinMode(echoPin,INPUT);
-
+  pinMode(trigPin,OUTPUT);
+  pinMode(echoPin,INPUT);
     
-    // Checking if LCD was initialized
-    if(lcdhd == -1){
-        printf("LCD could not be initialized. Exiting.");
-        return 1;
-    }
+  // Checking if LCD was initialized
+  if(lcdhd == -1){
+      printf("LCD could not be initialized. Exiting.");
+      return 1;
+  }
 
-    while(1){
-	if(status == false){
-	   lcdPosition(lcdhd,0,0);
-	   lcdPrintf(lcdhd, "Disarmed");
-	   setLedColor(99,0,99);
-	}
-	else{
-
-		setLedColor(1,99,99);
-	    distance = printDistance();
+  while(1){
+	  if(!status){
+	    lcdPosition(lcdhd,0,0);
+	    lcdPrintf(lcdhd, "Disarmed");
+	    setLedColor(99,0,99);
+	    } 
+	    else{
+        setLedColor(1,99,99);
+	      distance = printDistance();
        	delay(500);
 
 		if(distance < 20){
 			system(command);
-            system("ifconfig");
+      system("ifconfig");
 			while(1){
 				lcdPosition(lcdhd,0,0);
 				lcdPrintf(lcdhd, "Sensor Triggered");
 				setLedColor(99,99,0);
-		}}
-    }}
-
+		    }
+      }
+    }
+  }
 	return 1;
 }
 
