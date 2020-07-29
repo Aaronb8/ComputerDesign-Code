@@ -142,8 +142,8 @@ float getSonar(){  // Get the measurement result of ultrasonic module with unit:
 float printDistance(){
     float distance = 0;
     distance = getSonar();
-    lcdPosition(lcdhd,0,0);
-    lcdPrintf(lcdhd, "Armed Away");
+    //lcdPosition(lcdhd,0,0);
+    lcdPuts(lcdhd, "Armed Away");
     return distance;
 }
 
@@ -219,11 +219,10 @@ int main(void)
   while(1){
 	  if(!status){
       lcdClear(lcdhd);
-	    lcdPosition(lcdhd,0,0);
+	    //lcdPosition(lcdhd,0,0);
 	    lcdPuts(lcdhd, "Disarmed Home");
 	    setLedColor(99,0,99);
-	    } 
-	    else{
+	    }else{
         setLedColor(1,99,99);
 	      distance = printDistance();
        	delay(500);
@@ -236,7 +235,7 @@ int main(void)
        -d key=EEL4709CSUMMER20"); */
 			while(1){
         lcdClear(lcdhd);
-				lcdPosition(lcdhd,0,0);
+				//lcdPosition(lcdhd,0,0);
 				lcdPuts(lcdhd, "Sensor Triggered");
 				setLedColor(99,99,0);
 		    }
