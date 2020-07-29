@@ -38,6 +38,7 @@
 #define timeOut MAX_DISTANCE*60 
 
 // For LCD Screen
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define pcf8574_address 0x27    
 #define BASE 64                 
 
