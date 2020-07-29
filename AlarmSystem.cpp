@@ -23,9 +23,9 @@
 #include <string.h>
 
 // For RBG LED
-#define ledPinRed    0
-#define ledPinGreen  1
-#define ledPinBlue   2
+#define ledPinRed 0
+#define ledPinGreen 1
+#define ledPinBlue 2
 
 //interrupt pin
 #define isrPin 29 
