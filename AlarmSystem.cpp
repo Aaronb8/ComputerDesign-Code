@@ -166,6 +166,8 @@ int main(void)
 
   printf("Sensor and Screen are Initializing.\n\n");
 
+
+
   // LCD, LED, and Ultrasonic Sensor Set up
   wiringPiSetup(); 
   setupLedPin();
@@ -185,6 +187,8 @@ int main(void)
   pinMode(trigPin,OUTPUT);
   pinMode(echoPin,INPUT);
     
+
+
   // Checking if LCD was initialized
   if(lcdhd == -1){
       printf("LCD could not be initialized. Exiting.");
@@ -194,14 +198,14 @@ int main(void)
   while(1){
 	  if(!status){
       lcdClear(lcdhd);
-	    lcdPuts(lcdhd, "Disarmed"); //Disarmed
+	    lcdPuts(lcdhd, "Disarmed"); 
 	    setLedColor(99,0,99);
 	    }else{
         setLedColor(1,99,99);
 	      float distance = 0;
         distance = getSonar();
         lcdPosition(lcdhd,0,0);
-        lcdPrintf(lcdhd, "Armed");
+        lcdPrintf(lcdhd, "Armed  ");
        	delay(500);
 
 		if(distance < 20){
